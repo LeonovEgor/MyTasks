@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -16,5 +16,21 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="Margin" parent="AppTheme">
+        <item name="android:layout_margin">4dp</item>
+    </style>
+
+    <style name="Title" parent="Margin">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Text" parent="Margin">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="Date" parent="Margin">
+        <item name="android:textSize">10sp</item>
+    </style>
 
 </resources>
