@@ -4,7 +4,7 @@ import ru.leonov.mytasks.model.entities.Note
 import ru.leonov.mytasks.model.utils.getCurrentDateTime
 
 object NotesRepository {
-    private val notes: List<Note> = listOf(
+    val notes: List<Note> = listOf(
         Note(
             "Заметка 1",
             "Текст заметки 1. Не очень длинный, но интересный",
@@ -42,8 +42,4 @@ object NotesRepository {
             0xffffeb3b.toInt()
         )
     )
-
-    fun getNotes(): List<Note>{
-        return notes
-    }
 }

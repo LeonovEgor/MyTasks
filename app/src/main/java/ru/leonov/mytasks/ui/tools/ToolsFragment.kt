@@ -23,7 +23,7 @@ class ToolsFragment : Fragment() {
 
         val textView = root.findViewById<TextView>(R.id.text_tools)
 
-        toolsViewModel!!.text.observe(this, Observer { s -> textView.text = s })
+        toolsViewModel!!.text.observe(viewLifecycleOwner, Observer { s -> textView.text = s })
         return root
     }
 }

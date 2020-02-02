@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-
+import androidx.lifecycle.ViewModelProvider
 import ru.leonov.mytasks.R
 
 class ShareFragment : Fragment() {
@@ -17,10 +16,10 @@ class ShareFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        shareViewModel = ViewModelProviders.of(this).get(ShareViewModel::class.java)
+        shareViewModel = ViewModelProvider(this).get(ShareViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_share, container, false)
         val textView = root.findViewById<TextView>(R.id.text_share)
-        shareViewModel!!.text.observe(this, Observer { s -> textView.text = s })
+        shareViewModel!!.text.observe(viewLifecycleOwner, Observer { s -> textView.text = s })
         return root
     }
 }

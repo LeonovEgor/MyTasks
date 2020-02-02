@@ -11,7 +11,7 @@ class NotesViewModel : ViewModel() {
     private val viewStateLiveData: MutableLiveData<NotesViewState> = MutableLiveData()
 
     init {
-        viewStateLiveData.value = NotesViewState(NotesRepository.getNotes())
+        viewStateLiveData.value = NotesViewState(NotesRepository.notes)
     }
 
     fun getNotesViewState(): LiveData<NotesViewState> = viewStateLiveData
