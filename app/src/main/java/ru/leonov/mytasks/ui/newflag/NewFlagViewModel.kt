@@ -1,10 +1,10 @@
-package ru.leonov.mytasks.ui.tools
+package ru.leonov.mytasks.ui.newflag
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class ToolsViewModel : ViewModel() {
+class NewFlagViewModel : ViewModel() {
 
     private val mText: MutableLiveData<String>
 
@@ -13,6 +13,6 @@ class ToolsViewModel : ViewModel() {
 
     init {
         mText = MutableLiveData()
-        mText.value = "This is tools fragment"
+        mText.value = "This is send fragment"
     }
 }

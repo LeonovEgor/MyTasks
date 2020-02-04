@@ -1,4 +1,4 @@
-package ru.leonov.mytasks.ui.home
+package ru.leonov.mytasks.ui.notesList
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

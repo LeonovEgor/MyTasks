@@ -1,4 +1,4 @@
-package ru.leonov.mytasks.ui.home
+package ru.leonov.mytasks.ui.notesList
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_notes_list.*
 import ru.leonov.mytasks.R
 
 class NotesFragment : Fragment() {
@@ -19,7 +19,7 @@ class NotesFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? {
         notesViewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_notes_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

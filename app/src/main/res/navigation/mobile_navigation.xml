@@ -7,37 +7,43 @@
 
     <fragment
         android:id="@+id/nav_notes"
-        android:name="ru.leonov.mytasks.ui.home.NotesFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:name="ru.leonov.mytasks.ui.notesList.NotesFragment"
+        android:label="@string/menu_notes"
+        tools:layout="@layout/fragment_notes_list" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="ru.leonov.mytasks.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_current_note"
+        android:name="ru.leonov.mytasks.ui.note.CurrentNoteFragment"
+        android:label="@string/menu_current_notes"
+        tools:layout="@layout/fragment_current_note" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="ru.leonov.mytasks.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_reminding"
+        android:name="ru.leonov.mytasks.ui.notesList.NotesFragment"
+        android:label="@string/menu_reminding"
+        tools:layout="@layout/fragment_notes_list" />
 
     <fragment
-        android:id="@+id/nav_tools"
-        android:name="ru.leonov.mytasks.ui.tools.ToolsFragment"
-        android:label="@string/menu_tools"
-        tools:layout="@layout/fragment_tools" />
+        android:id="@+id/nav_archive"
+        android:name="ru.leonov.mytasks.ui.notesList.NotesFragment"
+        android:label="@string/menu_archive"
+        tools:layout="@layout/fragment_notes_list" />
 
     <fragment
-        android:id="@+id/nav_share"
-        android:name="ru.leonov.mytasks.ui.share.ShareFragment"
-        android:label="@string/menu_share"
-        tools:layout="@layout/fragment_share" />
+        android:id="@+id/nav_trash"
+        android:name="ru.leonov.mytasks.ui.notesList.NotesFragment"
+        android:label="@string/menu_trash"
+        tools:layout="@layout/fragment_notes_list" />
 
     <fragment
-        android:id="@+id/nav_send"
-        android:name="ru.leonov.mytasks.ui.send.SendFragment"
-        android:label="@string/menu_send"
-        tools:layout="@layout/fragment_send" />
+        android:id="@+id/nav_important"
+        android:name="ru.leonov.mytasks.ui.notesList.NotesFragment"
+        android:label="@string/menu_important"
+        tools:layout="@layout/fragment_notes_list" />
+
+    <fragment
+        android:id="@+id/nav_new_flag"
+        android:name="ru.leonov.mytasks.ui.newflag.NewFlagFragment"
+        android:label="@string/menu_new_flag"
+        tools:layout="@layout/fragment_new_flag" />
 </navigation>

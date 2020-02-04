@@ -1,4 +1,4 @@
-package ru.leonov.mytasks.ui.home
+package ru.leonov.mytasks.ui.notesList
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
