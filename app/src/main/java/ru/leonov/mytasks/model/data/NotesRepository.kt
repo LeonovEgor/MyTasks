@@ -2,6 +2,7 @@ package ru.leonov.mytasks.model.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import ru.leonov.mytasks.model.entities.Color
 import ru.leonov.mytasks.model.entities.Note
 import ru.leonov.mytasks.model.utils.getCurrentDateTime
 import java.util.*
@@ -15,42 +16,42 @@ object NotesRepository {
                     "Заметка 1",
                     "Текст заметки 1. Не очень длинный, но интересный",
                     getCurrentDateTime(),
-                    0xfff06292.toInt()
+                    Color.WHITE
             ),
             Note(
                     UUID.randomUUID().toString(),
                     "Заметка 2",
                     "Текст заметки 2. Не очень длинный, но интересный",
                     getCurrentDateTime(),
-                    0xff9575cd.toInt()
+                    Color.YELLOW
             ),
             Note(
                     UUID.randomUUID().toString(),
                     "Заметка 3",
                     "Текст заметки 3. Не очень длинный, но интересный",
                     getCurrentDateTime(),
-                    0xff64b5f6.toInt()
+                    Color.GREEN
             ),
             Note(
                     UUID.randomUUID().toString(),
                     "Заметка 4",
                     "Текст заметки 4. Не очень длинный, но интересный",
                     getCurrentDateTime(),
-                    0xff4db6ac.toInt()
+                    Color.BLUE
             ),
             Note(
                     UUID.randomUUID().toString(),
                     "Заметка 5",
                     "Текст заметки 5. Не очень длинный, но интересный",
                     getCurrentDateTime(),
-                    0xffb2ff59.toInt()
+                    Color.VIOLET
             ),
             Note(
                     UUID.randomUUID().toString(),
                     "Заметка 6",
                     "Текст заметки 6. Не очень длинный, но интересный",
                     getCurrentDateTime(),
-                    0xffffeb3b.toInt()
+                    Color.PINK
             )
     )
 

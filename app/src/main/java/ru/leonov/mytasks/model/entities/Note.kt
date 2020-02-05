@@ -17,15 +17,15 @@ data class Note ( val id: String,
 
         other as Note
 
-        return id != other.id
+        return id == other.id
     }
 
-    override fun hashCode(): Int {
-        var result = id.hashCode()
-        result = 31 * result + title.hashCode()
-        result = 31 * result + text.hashCode()
-        result = 31 * result + date.hashCode()
-        result = 31 * result + color.hashCode()
-        return result
-    }
+//    override fun hashCode(): Int {
+//        var result = id.hashCode()
+//        result = 31 * result + title.hashCode()
+//        result = 31 * result + text.hashCode()
+//        result = 31 * result + date.hashCode()
+//        result = 31 * result + color.hashCode()
+//        return result
+//    }
 }
