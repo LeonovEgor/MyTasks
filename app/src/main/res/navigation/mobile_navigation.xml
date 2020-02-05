@@ -9,7 +9,12 @@
         android:id="@+id/nav_notes"
         android:name="ru.leonov.mytasks.ui.notesList.NotesFragment"
         android:label="@string/menu_notes"
-        tools:layout="@layout/fragment_notes_list" />
+        tools:layout="@layout/fragment_notes_list">
+        <action
+            android:id="@+id/action_current_note"
+            app:destination="@id/nav_current_note" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/nav_current_note"
