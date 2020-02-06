@@ -19,13 +19,16 @@ class CurrentNoteViewModel : ViewModel() {
         pendingNote = note
     }
 
-    override fun onCleared(){
+    override fun onCleared() = save()
+
+    fun gotoNotesList() {
+        save()
+        _gotoNotesListEvent.value = Event(Unit)
+    }
+
+    private fun save() {
         pendingNote?.let {
             NotesRepository.saveNote(it)
         }
-    }
-
-    fun gotoNotesList() {
-        _gotoNotesListEvent.value = Event(Unit)
     }
 }
