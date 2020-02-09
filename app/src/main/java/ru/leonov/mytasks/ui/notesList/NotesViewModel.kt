@@ -2,15 +2,28 @@ package ru.leonov.mytasks.ui.notesList
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import ru.leonov.mytasks.model.data.NoteResult
 import ru.leonov.mytasks.model.data.NotesRepository
 import ru.leonov.mytasks.model.entities.Note
-import ru.leonov.mytasks.model.presenters.NotesViewState
 import ru.leonov.mytasks.model.utils.Event
+import ru.leonov.mytasks.ui.base.BaseViewModel
 
-class NotesViewModel : ViewModel() {
+class NotesViewModel : BaseViewModel<List<Note>?, NotesViewState>() {
 
-    private val viewStateLiveData: MutableLiveData<NotesViewState> = MutableLiveData()
+    private val notesRepository = NotesRepository.getNotes()
+
+    private val notesObserver = {noteResult: NoteResult ->
+        noteResult.let {
+            when (noteResult) {
+                is NoteResult.Success<*> -> {
+                    viewStateLiveData.value = NotesViewState(notes = noteResult.data as? List<Note>)
+                }
+                is NoteResult.Error -> {
+                    viewStateLiveData.value = NotesViewState(error = noteResult.error)
+                }
+            }
+        }
+    }
 
     private val _openNoteEvent = MutableLiveData<Event<Note>>()
     val openNoteEvent: LiveData<Event<Note>>
@@ -21,12 +34,14 @@ class NotesViewModel : ViewModel() {
         get() = _openNewNoteEvent
 
     init {
-        NotesRepository.getNotes().observeForever {notes ->
-            viewStateLiveData.value = viewStateLiveData.value?.copy(notes = notes) ?: NotesViewState(notes)
-        }
+        viewStateLiveData.value = NotesViewState()
+        notesRepository.observeForever(notesObserver)
     }
 
-    fun getNotesViewState(): LiveData<NotesViewState> = viewStateLiveData
+    override fun onCleared() {
+        notesRepository.removeObserver(notesObserver)
+        super.onCleared()
+    }
 
     fun onNoteClick(note: Note) {
         _openNoteEvent.value = Event(note)
@@ -35,5 +50,4 @@ class NotesViewModel : ViewModel() {
     fun onNewNoteClick() {
         _openNewNoteEvent.value = Event(Unit)
     }
-
 }

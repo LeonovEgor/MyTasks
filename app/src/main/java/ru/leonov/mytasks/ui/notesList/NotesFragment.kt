@@ -1,37 +1,34 @@
 package ru.leonov.mytasks.ui.notesList
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_notes_list.*
 import ru.leonov.mytasks.R
+import ru.leonov.mytasks.model.entities.Note
+import ru.leonov.mytasks.ui.base.BaseFragment
 
-class NotesFragment : Fragment() {
-    private val EXTRA_NOTE = "NOTE"
+class NotesFragment : BaseFragment<List<Note>?, NotesViewState>() {
+    private val NOTE_ID = "NOTE"
 
-    private var notesViewModel: NotesViewModel? = null
-    private lateinit var adapter: NotesRVAdapter
     private var navController: NavController? = null
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        notesViewModel = ViewModelProvider(this).get(NotesViewModel::class.java)
-        navController = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
+    override val layoutRes = R.layout.fragment_notes_list
 
-        return inflater.inflate(R.layout.fragment_notes_list, container, false)
+    override val viewModel: NotesViewModel by lazy {
+        ViewModelProvider(this).get(NotesViewModel::class.java)
     }
+
+    private lateinit var adapter: NotesRVAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initRecyclerView()
         initNavigation()
         initFab()
@@ -40,39 +37,49 @@ class NotesFragment : Fragment() {
     private fun initRecyclerView() {
         rv_notes.layoutManager = GridLayoutManager(activity, 2)
 
-        adapter = NotesRVAdapter {note -> notesViewModel?.onNoteClick(note) }
+        adapter = NotesRVAdapter {note -> viewModel.onNoteClick(note) }
         rv_notes.adapter = adapter
-
-        notesViewModel?.getNotesViewState()?.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                adapter.notes = it.notes
-            }
-        })
     }
 
     private fun initNavigation() {
-        notesViewModel?.openNoteEvent?.observe(viewLifecycleOwner, Observer { event ->
+        navController = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
+
+        viewModel.openNoteEvent.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let {note ->
                 val bundle = Bundle()
-                bundle.putParcelable(EXTRA_NOTE, note)
+                bundle.putString(NOTE_ID, note.id)
                 navController?.navigate(R.id.action_current_note, bundle)
             }
         })
 
-        notesViewModel?.openNewNoteEvent?.observe(viewLifecycleOwner, Observer { event ->
+        viewModel.openNewNoteEvent.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let {
                 navController?.navigate(R.id.action_current_note)
             }
         })
-
     }
 
     private fun initFab() {
         activity?.findViewById<FloatingActionButton>(R.id.fab)?.let {
             it.setImageResource(R.drawable.ic_add_black_24dp)
             it.setOnClickListener {
-                notesViewModel?.onNewNoteClick()
+                viewModel.onNewNoteClick()
             }
         }
     }
+
+    override fun renderData(data: List<Note>?) {
+        data?.let {
+            adapter.notes = it
+            tv_error.text = ""
+            tv_error.visibility = View.GONE
+        }
+    }
+
+
+    override fun showError(error: String) {
+        tv_error.visibility = View.VISIBLE
+        tv_error.text = error
+    }
+
 }
