@@ -6,11 +6,8 @@ import android.text.TextWatcher
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_current_note.*
-import kotlinx.android.synthetic.main.fragment_notes_list.*
 import ru.leonov.mytasks.R
 import ru.leonov.mytasks.model.entities.Note
 import ru.leonov.mytasks.model.utils.formatedString
@@ -84,7 +81,7 @@ class CurrentNoteFragment : BaseFragment<Note?, CurrentNoteViewState>() {
     private fun initNavigation() {
         viewModel.gotoNotesListEvent.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let {
-                activity?.onBackPressed();
+                activity?.onBackPressed()
             }
         })
     }
