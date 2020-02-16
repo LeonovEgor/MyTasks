@@ -1,11 +1,15 @@
 package ru.leonov.mytasks.ui.splash
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import ru.leonov.mytasks.model.data.NoAuthException
 import ru.leonov.mytasks.model.data.NotesRepository
-import ru.leonov.mytasks.ui.base.BaseViewModel
 
 
-class SplashViewModel() : BaseViewModel<Boolean?, SplashViewState>() {
+class SplashViewModel: ViewModel() {
+    private val viewStateLiveData = MutableLiveData<SplashViewState>()
+    fun getViewState(): LiveData<SplashViewState> = viewStateLiveData
 
     fun requestUser() {
         NotesRepository.getCurrentUser().observeForever {

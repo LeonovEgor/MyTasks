@@ -1,5 +1,7 @@
 package ru.leonov.mytasks
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -17,10 +19,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 
 import android.view.Menu
+import android.view.MenuItem
+import com.firebase.ui.auth.AuthUI
+import ru.leonov.mytasks.ui.notesList.LogoutDialog
+import ru.leonov.mytasks.ui.splash.SplashActivity
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), LogoutDialog.LogoutListener {
 
     private var mAppBarConfiguration: AppBarConfiguration? = null
+
+    companion object {
+        fun start(context: Context) = Intent(context, MainActivity::class.java).apply {
+            context.startActivity(this)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,8 +64,28 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+            when(item.itemId) {
+                R.id.logout -> showLogoutDialog().let { true }
+                else -> false
+            }
+
+    private fun showLogoutDialog() {
+        supportFragmentManager.findFragmentByTag(LogoutDialog.TAG) ?:
+        LogoutDialog.createInstance().show(supportFragmentManager, LogoutDialog.TAG)
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         return NavigationUI.navigateUp(navController, mAppBarConfiguration!!) || super.onSupportNavigateUp()
+    }
+
+    override fun onLogout() {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener {
+                    startActivity(Intent(this, SplashActivity::class.java))
+                    finish()
+                }
     }
 }

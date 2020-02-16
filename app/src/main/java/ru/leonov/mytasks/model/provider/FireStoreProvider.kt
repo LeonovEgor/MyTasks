@@ -3,6 +3,7 @@ package ru.leonov.mytasks.model.provider
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import ru.leonov.mytasks.model.data.NoAuthException
 import ru.leonov.mytasks.model.data.NoteResult
@@ -22,9 +23,10 @@ class FireStoreProvider: RemoteDataProvider {
         private const val USER_COLLECTION = "users"
     }
 
-    private val userNotesCollection = currentUser?.let {
-        db.collection(USER_COLLECTION).document(it.uid).collection(NOTES_COLLECTION)
-    } ?: throw NoAuthException()
+    private val userNotesCollection: CollectionReference
+        get() = currentUser?.let {
+            db.collection(USER_COLLECTION).document(it.uid).collection(NOTES_COLLECTION)
+        } ?: throw NoAuthException()
 
     override fun getCurrentUser() = MutableLiveData<User?>().apply {
         value = currentUser?.let { User(it.displayName ?: "", it.email ?: "") }
