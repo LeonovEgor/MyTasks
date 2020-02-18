@@ -8,9 +8,9 @@ import ru.leonov.mytasks.model.entities.Note
 import ru.leonov.mytasks.model.utils.Event
 import ru.leonov.mytasks.ui.base.BaseViewModel
 
-class NotesViewModel : BaseViewModel<List<Note>?, NotesViewState>() {
+class NotesViewModel(private val notesRepository: NotesRepository) : BaseViewModel<List<Note>?, NotesViewState>() {
 
-    private val notesRepository = NotesRepository.getNotes()
+    private val allNotes = notesRepository.getNotes()
 
     private val notesObserver = {noteResult: NoteResult ->
         noteResult.let {
@@ -35,11 +35,11 @@ class NotesViewModel : BaseViewModel<List<Note>?, NotesViewState>() {
 
     init {
         viewStateLiveData.value = NotesViewState()
-        notesRepository.observeForever(notesObserver)
+        allNotes.observeForever(notesObserver)
     }
 
     override fun onCleared() {
-        notesRepository.removeObserver(notesObserver)
+        allNotes.removeObserver(notesObserver)
         super.onCleared()
     }
 

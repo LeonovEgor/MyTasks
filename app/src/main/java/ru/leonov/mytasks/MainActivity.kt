@@ -21,10 +21,10 @@ import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import com.firebase.ui.auth.AuthUI
-import ru.leonov.mytasks.ui.notesList.LogoutDialog
+import org.jetbrains.anko.alert
 import ru.leonov.mytasks.ui.splash.SplashActivity
 
-class MainActivity : AppCompatActivity(), LogoutDialog.LogoutListener {
+class MainActivity : AppCompatActivity() {
 
     private var mAppBarConfiguration: AppBarConfiguration? = null
 
@@ -71,8 +71,12 @@ class MainActivity : AppCompatActivity(), LogoutDialog.LogoutListener {
             }
 
     private fun showLogoutDialog() {
-        supportFragmentManager.findFragmentByTag(LogoutDialog.TAG) ?:
-        LogoutDialog.createInstance().show(supportFragmentManager, LogoutDialog.TAG)
+        alert {
+            titleResource = R.string.logout_dialog_title
+            messageResource = R.string.logout_dialog_message
+            positiveButton(R.string.logout_dialog_ok) { onLogout() }
+            negativeButton(R.string.logout_dialog_cancel) { dialog -> dialog.dismiss() }
+        }.show()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -80,7 +84,7 @@ class MainActivity : AppCompatActivity(), LogoutDialog.LogoutListener {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration!!) || super.onSupportNavigateUp()
     }
 
-    override fun onLogout() {
+    fun onLogout() {
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnCompleteListener {

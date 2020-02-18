@@ -5,11 +5,12 @@ import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @Parcelize
-data class Note ( val id: String = "",
-             val title: String = "",
-             val text: String = "",
-             val date: Date = Date(),
-             val color: Color = Color.WHITE) : Parcelable {
+data class Note (
+         val id: String = "",
+         val title: String = "",
+         val text: String = "",
+         val date: Date = Date(),
+         val color: Color = Color.WHITE) : Parcelable {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -18,6 +19,16 @@ data class Note ( val id: String = "",
         other as Note
 
         return id == other.id
+    }
+
+    enum class Color{
+        WHITE,
+        YELLOW,
+        GREEN,
+        BLUE,
+        RED,
+        VIOLET,
+        PINK
     }
 
 //    override fun hashCode(): Int {

@@ -12,6 +12,7 @@ import ru.leonov.mytasks.R
 import ru.leonov.mytasks.model.entities.Color
 import ru.leonov.mytasks.model.entities.Note
 import ru.leonov.mytasks.model.utils.formatedString
+import ru.leonov.mytasks.model.utils.getColorInt
 
 class NotesRVAdapter(val onItemViewClick : ((note: Note) -> Unit)? = null)
     : RecyclerView.Adapter<NotesRVAdapter.ViewHolder>() {
@@ -40,21 +41,10 @@ class NotesRVAdapter(val onItemViewClick : ((note: Note) -> Unit)? = null)
             tv_text.text = note.text
             tv_date.text = note.date.formatedString()
 
-            val color = when(note.color){
-                Color.WHITE -> R.color.white
-                Color.YELLOW -> R.color.yellow
-                Color.GREEN -> R.color.green
-                Color.BLUE -> R.color.blue
-                Color.RED -> R.color.red
-                Color.VIOLET -> R.color.violet
-                Color.PINK -> R.color.pink
-            }
-
-            (this as CardView).setCardBackgroundColor(ContextCompat.getColor(itemView.context, color))
+            (this as CardView).setCardBackgroundColor(note.color.getColorInt(context))
             itemView.setOnClickListener {
                 onItemViewClick?.invoke(note)
             }
-
         }
     }
 }

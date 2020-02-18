@@ -3,18 +3,20 @@ package ru.leonov.mytasks.ui.note
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_current_note.*
+import org.jetbrains.anko.alert
 import ru.leonov.mytasks.R
 import ru.leonov.mytasks.model.entities.Note
 import ru.leonov.mytasks.model.utils.formatedString
 import ru.leonov.mytasks.ui.base.BaseFragment
 import java.util.*
 
-class CurrentNoteFragment : BaseFragment<Note?, CurrentNoteViewState>() {
+class CurrentNoteFragment : BaseFragment<CurrentNoteViewState.Data, CurrentNoteViewState>() {
 
     private val NOTE_ID = "NOTE"
 
@@ -62,6 +64,14 @@ class CurrentNoteFragment : BaseFragment<Note?, CurrentNoteViewState>() {
             note?.let { viewModel.save(it) }
     }
 
+    fun deleteNote() {
+        activity?.alert {
+            messageResource = R.string.note_delete_message
+            negativeButton(R.string.note_delete_cancel) { dialog -> dialog.dismiss() }
+            positiveButton(R.string.note_delete_ok) { viewModel.delete() }
+        }?.show()
+    }
+
     private fun createNewNote(): Note {
         return Note(UUID.randomUUID().toString(),
                 et_title.text.toString(),
@@ -86,18 +96,29 @@ class CurrentNoteFragment : BaseFragment<Note?, CurrentNoteViewState>() {
         })
     }
 
-    override fun renderData(data: Note?) {
-        this.note = data
+    override fun renderData(data: CurrentNoteViewState.Data) {
+        if (data.isDeleted) {
+            viewModel.gotoNotesList()
+            return
+        }
+
+        this.note = data.note
 
         note?.let { note ->
             et_title.setText(note.title)
             et_body.setText(note.text)
             tv_status.text = note.date.formatedString()
-
         }
     }
 
     override fun showError(error: String) {
         tv_status.text = error
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+            when(item.itemId) {
+                R.id.delete -> deleteNote().let { true }
+                else -> false
+            }
+
 }

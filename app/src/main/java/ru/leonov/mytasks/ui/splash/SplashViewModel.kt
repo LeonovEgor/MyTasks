@@ -7,12 +7,12 @@ import ru.leonov.mytasks.model.data.NoAuthException
 import ru.leonov.mytasks.model.data.NotesRepository
 
 
-class SplashViewModel: ViewModel() {
+class SplashViewModel(private val notesRepository: NotesRepository): ViewModel() {
     private val viewStateLiveData = MutableLiveData<SplashViewState>()
     fun getViewState(): LiveData<SplashViewState> = viewStateLiveData
 
     fun requestUser() {
-        NotesRepository.getCurrentUser().observeForever {
+        notesRepository.getCurrentUser().observeForever {
             viewStateLiveData.value = it?.let {
                 SplashViewState(authenticated = true)
             } ?: let {

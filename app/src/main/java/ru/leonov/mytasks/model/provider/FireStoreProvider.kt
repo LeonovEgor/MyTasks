@@ -1,6 +1,7 @@
 package ru.leonov.mytasks.model.provider
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -10,27 +11,26 @@ import ru.leonov.mytasks.model.data.NoteResult
 import ru.leonov.mytasks.model.entities.Note
 import ru.leonov.mytasks.model.entities.User
 
-class FireStoreProvider: RemoteDataProvider {
+class FireStoreProvider(private val firebaseAuth: FirebaseAuth, private val store: FirebaseFirestore): RemoteDataProvider {
     private val TAG = "${FireStoreProvider::class.java.simpleName} :"
-
-    private val db : FirebaseFirestore by lazy { FirebaseFirestore.getInstance() }
-
-    private val currentUser
-        get() = FirebaseAuth.getInstance().currentUser
 
     companion object {
         private const val NOTES_COLLECTION = "notes"
         private const val USER_COLLECTION = "users"
     }
 
+    private val currentUser
+        get() = firebaseAuth.currentUser
+
     private val userNotesCollection: CollectionReference
         get() = currentUser?.let {
-            db.collection(USER_COLLECTION).document(it.uid).collection(NOTES_COLLECTION)
+            store.collection(USER_COLLECTION).document(it.uid).collection(NOTES_COLLECTION)
         } ?: throw NoAuthException()
 
     override fun getCurrentUser() = MutableLiveData<User?>().apply {
         value = currentUser?.let { User(it.displayName ?: "", it.email ?: "") }
     }
+
     override fun subscribeToAllNotes() = MutableLiveData<NoteResult>().apply {
         try {
             userNotesCollection.addSnapshotListener { snapshot, e ->
@@ -74,6 +74,19 @@ class FireStoreProvider: RemoteDataProvider {
                     .addOnFailureListener { throw it }
         } catch (e: Throwable) {
             Log.e(TAG, "Alarm!!! Note $note is not saved!!!: $e")
+            value = NoteResult.Error(e)
+        }
+    }
+
+    override fun deleteNote(noteId: String) = MutableLiveData<NoteResult>().apply {
+        try {
+            userNotesCollection.document(noteId).delete()
+                    .addOnSuccessListener {
+                        value = NoteResult.Success(null)
+                    }.addOnFailureListener {
+                        value = NoteResult.Error(it)
+                    }
+        } catch (e: Throwable){
             value = NoteResult.Error(e)
         }
     }
