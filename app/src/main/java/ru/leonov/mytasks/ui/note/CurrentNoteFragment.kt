@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_current_note.*
 import org.jetbrains.anko.alert
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import ru.leonov.mytasks.R
 import ru.leonov.mytasks.model.entities.Note
 import ru.leonov.mytasks.model.utils.formatedString
@@ -23,13 +24,14 @@ class CurrentNoteFragment : BaseFragment<CurrentNoteViewState.Data, CurrentNoteV
     private var note: Note? = null
 
     override val layoutRes = R.layout.fragment_current_note
-    override val viewModel: CurrentNoteViewModel by lazy { ViewModelProvider(this).get(CurrentNoteViewModel::class.java) }
+    override val viewModel: CurrentNoteViewModel by sharedViewModel()
+    //lazy { ViewModelProvider(this).get(CurrentNoteViewModel::class.java) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         loadNote()
-        initView()
+        setEditListener()
         initNavigation()
         initFab()
     }
@@ -41,9 +43,14 @@ class CurrentNoteFragment : BaseFragment<CurrentNoteViewState.Data, CurrentNoteV
         }
     }
 
-    private fun initView() {
+    private fun setEditListener() {
         et_title.addTextChangedListener(textChangeListener)
         et_body.addTextChangedListener(textChangeListener)
+    }
+
+    private fun removeEditListener() {
+        et_title.removeTextChangedListener(textChangeListener)
+        et_body.removeTextChangedListener(textChangeListener)
     }
 
     private val textChangeListener = object : TextWatcher {
@@ -103,6 +110,8 @@ class CurrentNoteFragment : BaseFragment<CurrentNoteViewState.Data, CurrentNoteV
         }
 
         this.note = data.note
+
+        removeEditListener();
 
         note?.let { note ->
             et_title.setText(note.title)

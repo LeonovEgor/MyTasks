@@ -3,12 +3,12 @@ package ru.leonov.mytasks.ui.notesList
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_notes_list.*
+import org.koin.android.viewmodel.ext.android.sharedViewModel
 import ru.leonov.mytasks.R
 import ru.leonov.mytasks.model.entities.Note
 import ru.leonov.mytasks.ui.base.BaseFragment
@@ -20,9 +20,7 @@ class NotesFragment : BaseFragment<List<Note>?, NotesViewState>() {
 
     override val layoutRes = R.layout.fragment_notes_list
 
-    override val viewModel: NotesViewModel by lazy {
-        ViewModelProvider(this).get(NotesViewModel::class.java)
-    }
+    override val viewModel: NotesViewModel by sharedViewModel()
 
     private lateinit var adapter: NotesRVAdapter
 

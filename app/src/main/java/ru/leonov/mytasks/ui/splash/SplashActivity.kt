@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.firebase.ui.auth.AuthUI
+import org.koin.android.viewmodel.ext.android.viewModel
 import ru.leonov.mytasks.MainActivity
 import ru.leonov.mytasks.R
 
@@ -17,9 +18,10 @@ class SplashActivity : AppCompatActivity() {
         private const val RC_SIGN_IN = 458
     }
 
-    private val viewModel by lazy {
-        ViewModelProvider(this).get(SplashViewModel::class.java)
-    }
+    private val viewModel: SplashViewModel by viewModel()
+//            by lazy {
+//        ViewModelProvider(this).get(SplashViewModel::class.java)
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
