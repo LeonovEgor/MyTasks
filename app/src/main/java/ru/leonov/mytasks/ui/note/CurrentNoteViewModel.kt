@@ -26,7 +26,7 @@ class CurrentNoteViewModel(private val notesRepository: NotesRepository)
     }
 
     fun loadNote(noteId: String) {
-        notesRepository.getNoteById(noteId).observeForever {result->
+        notesRepository.getNoteById(noteId).observeForever { result ->
             result?.let {
                 viewStateLiveData.value = when (result) {
                     is NoteResult.Success<*> -> CurrentNoteViewState(CurrentNoteViewState.Data(note = result.data as Note))

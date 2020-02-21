@@ -1,4 +1,4 @@
-package ru.geekbrains.gb_kotlin.ui.customviews
+package ru.leonov.mytasks.ui.customviews
 
 import android.content.Context
 import android.graphics.Canvas

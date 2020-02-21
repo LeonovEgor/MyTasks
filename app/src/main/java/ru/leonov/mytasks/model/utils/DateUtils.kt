@@ -9,6 +9,6 @@ fun Date.formatedString(format: String = "dd.mm.yyyy HH:mm:ss",
     return formatter.format(this)
 }
 
-fun getCurrentDateTime(): Date {
-    return Calendar.getInstance().time
-}
+fun getCurrentDateTime(): Date = Calendar.getInstance().time
+
+fun Date.getDateString(): String = this.formatedString()

@@ -27,5 +27,7 @@
     <string name="note_delete_message">Удалить?</string>
     <string name="note_delete_cancel">Нет</string>
     <string name="note_delete_ok">Да</string>
+    <string name="change_color">Выбрать цвет</string>
+    <string name="new_note">Новая заметка</string>
 
 </resources>

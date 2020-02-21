@@ -5,11 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_note.view.*
 import ru.leonov.mytasks.R
-import ru.leonov.mytasks.model.entities.Color
 import ru.leonov.mytasks.model.entities.Note
 import ru.leonov.mytasks.model.utils.formatedString
 import ru.leonov.mytasks.model.utils.getColorInt

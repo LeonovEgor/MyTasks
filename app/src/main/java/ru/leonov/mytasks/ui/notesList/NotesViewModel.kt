@@ -12,6 +12,7 @@ class NotesViewModel(private val notesRepository: NotesRepository) : BaseViewMod
 
     private val allNotes = notesRepository.getNotes()
 
+    @Suppress("UNCHECKED_CAST")
     private val notesObserver = {noteResult: NoteResult ->
         noteResult.let {
             when (noteResult) {
