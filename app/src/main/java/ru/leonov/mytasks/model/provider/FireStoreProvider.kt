@@ -12,7 +12,7 @@ import ru.leonov.mytasks.model.entities.Note
 import ru.leonov.mytasks.model.entities.User
 
 class FireStoreProvider(private val firebaseAuth: FirebaseAuth, private val store: FirebaseFirestore): RemoteDataProvider {
-    private val TAG = "${FireStoreProvider::class.java.simpleName} :"
+    //private val TAG = "${FireStoreProvider::class.java.simpleName} :"
 
     companion object {
         private const val NOTES_COLLECTION = "notes"
@@ -37,15 +37,15 @@ class FireStoreProvider(private val firebaseAuth: FirebaseAuth, private val stor
                 e?.let {
                     throw it
                 } ?: let {
-                    Log.d(TAG, "Load Notes success")
+                    //Log.d(TAG, "Load Notes success")
                     snapshot?.let { snapshot ->
-                        value = NoteResult.Success(snapshot.map { it.toObject(Note::class.java) })
+                        value = NoteResult.Success(snapshot.documents.map { it.toObject(Note::class.java) })
                     }
                 }
             }
         } catch (e: Throwable) {
-            Log.e(TAG, "Notes load Alarm!!! $e")
-            NoteResult.Error(e)
+            //Log.e(TAG, "Notes load Alarm!!! $e")
+            value = NoteResult.Error(e)
         }
     }
 
@@ -54,12 +54,12 @@ class FireStoreProvider(private val firebaseAuth: FirebaseAuth, private val stor
             userNotesCollection.document(id).get()
                     .addOnSuccessListener { snapshot ->
                         val note = snapshot.toObject(Note::class.java)
-                        Log.d(TAG, "Get Note success: $id - $note")
+                        //Log.d(TAG, "Get Note success: $id - $note")
                         value = NoteResult.Success(note)
                     }
                     .addOnFailureListener { throw it }
         } catch (e: Throwable) {
-            Log.e(TAG, "Alarm!!! getNoteById $id:  $e")
+            //Log.e(TAG, "Alarm!!! getNoteById $id:  $e")
             value = NoteResult.Error(e)
         }
     }
@@ -68,12 +68,12 @@ class FireStoreProvider(private val firebaseAuth: FirebaseAuth, private val stor
         try {
             userNotesCollection.document(note.id).set(note)
                     .addOnSuccessListener {
-                        Log.d(TAG, "Note $note is saved")
+                        //Log.d(TAG, "Note $note is saved")
                         value = NoteResult.Success(note)
                     }
                     .addOnFailureListener { throw it }
         } catch (e: Throwable) {
-            Log.e(TAG, "Alarm!!! Note $note is not saved!!!: $e")
+            //Log.e(TAG, "Alarm!!! Note $note is not saved!!!: $e")
             value = NoteResult.Error(e)
         }
     }

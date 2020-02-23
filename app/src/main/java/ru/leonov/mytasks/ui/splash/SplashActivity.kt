@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.firebase.ui.auth.AuthUI
 import org.koin.android.viewmodel.ext.android.viewModel
 import ru.leonov.mytasks.MainActivity
@@ -19,9 +18,6 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private val viewModel: SplashViewModel by viewModel()
-//            by lazy {
-//        ViewModelProvider(this).get(SplashViewModel::class.java)
-//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

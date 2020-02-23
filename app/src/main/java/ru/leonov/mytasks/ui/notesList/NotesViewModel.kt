@@ -1,5 +1,6 @@
 package ru.leonov.mytasks.ui.notesList
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.leonov.mytasks.model.data.NoteResult
@@ -26,6 +27,17 @@ class NotesViewModel(private val notesRepository: NotesRepository) : BaseViewMod
         }
     }
 
+    init {
+        viewStateLiveData.value = NotesViewState()
+        allNotes.observeForever(notesObserver)
+    }
+
+    @VisibleForTesting
+    override public fun onCleared() {
+        allNotes.removeObserver(notesObserver)
+        super.onCleared()
+    }
+
     private val _openNoteEvent = MutableLiveData<Event<Note>>()
     val openNoteEvent: LiveData<Event<Note>>
         get() = _openNoteEvent
@@ -33,16 +45,6 @@ class NotesViewModel(private val notesRepository: NotesRepository) : BaseViewMod
     private val _openNewNoteEvent = MutableLiveData<Event<Unit>>()
     val openNewNoteEvent: LiveData<Event<Unit>>
         get() = _openNewNoteEvent
-
-    init {
-        viewStateLiveData.value = NotesViewState()
-        allNotes.observeForever(notesObserver)
-    }
-
-    override fun onCleared() {
-        allNotes.removeObserver(notesObserver)
-        super.onCleared()
-    }
 
     fun onNoteClick(note: Note) {
         _openNoteEvent.value = Event(note)
