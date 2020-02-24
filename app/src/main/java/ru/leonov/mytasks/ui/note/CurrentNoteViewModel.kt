@@ -1,5 +1,6 @@
 package ru.leonov.mytasks.ui.note
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ru.leonov.mytasks.model.data.NoteResult
@@ -36,7 +37,8 @@ class CurrentNoteViewModel(private val notesRepository: NotesRepository)
         }
     }
 
-    override fun onCleared() = save()
+    @VisibleForTesting
+    override public fun onCleared() = save()
 
     fun gotoNotesList() {
         save()

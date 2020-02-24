@@ -2,6 +2,7 @@ package ru.leonov.mytasks.ui.notesList
 
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -14,6 +15,7 @@ import ru.leonov.mytasks.model.entities.Note
 import ru.leonov.mytasks.ui.base.BaseFragment
 
 class NotesFragment : BaseFragment<List<Note>?, NotesViewState>() {
+
     private val NOTE_ID = "NOTE"
 
     private var navController: NavController? = null
