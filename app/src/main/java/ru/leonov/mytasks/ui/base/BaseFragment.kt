@@ -5,25 +5,61 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.consumeEach
+import kotlin.coroutines.CoroutineContext
 
-abstract class BaseFragment<T, S : BaseViewState<T>> : Fragment() {
+@ExperimentalCoroutinesApi
+abstract class BaseFragment<T> : Fragment(), CoroutineScope {
 
-    abstract val viewModel: BaseViewModel<T, S>
+    abstract val viewModel: BaseViewModel<T>
     abstract val layoutRes: Int
 
+    private val job = Job()
+    private lateinit var dataJob: Job
+    private lateinit var errorJob: Job
+
+
+    override val coroutineContext: CoroutineContext by lazy {
+        Dispatchers.Main + job
+    }
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        viewModel.getViewState().observe(viewLifecycleOwner, Observer<S> { t ->
-                t?.apply {
-                    data?.let { renderData(it) }
-                    error?.let { renderError(it) }
-            }
-        })
-
         return inflater.inflate(layoutRes, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initData();
+    }
+
+    private fun initData() {
+        dataJob = launch {
+            viewModel.getViewChannel().consumeEach {
+                renderData(it)
+            }
+        }
+
+        errorJob = launch {
+            viewModel.getErrorChannel().consumeEach {
+                renderError(it)
+            }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        dataJob.cancel()
+        errorJob.cancel()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        coroutineContext.cancel()
     }
 
     abstract fun renderData(data: T)

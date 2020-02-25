@@ -5,9 +5,9 @@ import ru.leonov.mytasks.model.provider.FireStoreProvider
 import ru.leonov.mytasks.model.provider.RemoteDataProvider
 
 class NotesRepository(val remoteProvider: RemoteDataProvider) {
-    fun saveNote(note: Note) = remoteProvider.saveNote(note)
-    fun getNoteById(id: String) = remoteProvider.getNoteById(id)
+    suspend fun saveNote(note: Note) = remoteProvider.saveNote(note)
+    suspend fun getNoteById(id: String) = remoteProvider.getNoteById(id)
     fun getNotes() = remoteProvider.subscribeToAllNotes()
-    fun getCurrentUser() = remoteProvider.getCurrentUser()
-    fun deleteNote(noteId: String) = remoteProvider.deleteNote(noteId)
+    suspend fun getCurrentUser() = remoteProvider.getCurrentUser()
+    suspend fun deleteNote(noteId: String) = remoteProvider.deleteNote(noteId)
 }

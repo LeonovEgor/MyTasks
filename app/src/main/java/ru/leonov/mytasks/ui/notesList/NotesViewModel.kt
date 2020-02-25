@@ -3,38 +3,35 @@ package ru.leonov.mytasks.ui.notesList
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.consumeEach
+import kotlinx.coroutines.launch
 import ru.leonov.mytasks.model.data.NoteResult
 import ru.leonov.mytasks.model.data.NotesRepository
 import ru.leonov.mytasks.model.entities.Note
 import ru.leonov.mytasks.model.utils.Event
 import ru.leonov.mytasks.ui.base.BaseViewModel
 
-class NotesViewModel(private val notesRepository: NotesRepository) : BaseViewModel<List<Note>?, NotesViewState>() {
+@ExperimentalCoroutinesApi
+class NotesViewModel(notesRepository: NotesRepository) : BaseViewModel<List<Note>?>() {
 
-    private val allNotes = notesRepository.getNotes()
+    private val notesReceiveChannel = notesRepository.getNotes() //ReceiveChannel<>
 
-    @Suppress("UNCHECKED_CAST")
-    private val notesObserver = {noteResult: NoteResult ->
-        noteResult.let {
-            when (noteResult) {
-                is NoteResult.Success<*> -> {
-                    viewStateLiveData.value = NotesViewState(notes = noteResult.data as? List<Note>)
-                }
-                is NoteResult.Error -> {
-                    viewStateLiveData.value = NotesViewState(error = noteResult.error)
+    init {
+        @Suppress("UNCHECKED_CAST")
+        launch {
+            notesReceiveChannel.consumeEach { noteResult ->
+                when (noteResult) {
+                    is NoteResult.Success<*> -> setData(noteResult.data as? List<Note>)
+                    is NoteResult.Error -> setError(noteResult.error)
                 }
             }
         }
     }
 
-    init {
-        viewStateLiveData.value = NotesViewState()
-        allNotes.observeForever(notesObserver)
-    }
-
     @VisibleForTesting
     override public fun onCleared() {
-        allNotes.removeObserver(notesObserver)
+        notesReceiveChannel.cancel()
         super.onCleared()
     }
 

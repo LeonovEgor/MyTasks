@@ -2,19 +2,20 @@ package ru.leonov.mytasks.ui.notesList
 
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_notes_list.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import ru.leonov.mytasks.R
 import ru.leonov.mytasks.model.entities.Note
 import ru.leonov.mytasks.ui.base.BaseFragment
 
-class NotesFragment : BaseFragment<List<Note>?, NotesViewState>() {
+@ExperimentalCoroutinesApi
+class NotesFragment : BaseFragment<List<Note>?>() {
 
     private val NOTE_ID = "NOTE"
 
@@ -42,7 +43,7 @@ class NotesFragment : BaseFragment<List<Note>?, NotesViewState>() {
     }
 
     private fun initNavigation() {
-        navController = Navigation.findNavController(activity!!, R.id.nav_host_fragment)
+        navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
 
         viewModel.openNoteEvent.observe(viewLifecycleOwner, Observer { event ->
             event.getContentIfNotHandled()?.let {note ->
@@ -81,5 +82,4 @@ class NotesFragment : BaseFragment<List<Note>?, NotesViewState>() {
         tv_error.visibility = View.VISIBLE
         tv_error.text = error
     }
-
 }
