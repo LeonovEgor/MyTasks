@@ -6,7 +6,6 @@ import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -15,8 +14,6 @@ import org.junit.Rule
 import ru.leonov.mytasks.model.data.NoteResult
 import ru.leonov.mytasks.model.data.NotesRepository
 import ru.leonov.mytasks.model.entities.Note
-import ru.leonov.mytasks.ui.notesList.NotesViewState
-import java.util.*
 
 class CurrentNoteViewModelTest {
 
@@ -42,8 +39,8 @@ class CurrentNoteViewModelTest {
 
     @Test
     fun `loadNote should return CurrentNoteViewState data`() {
-        var result: CurrentNoteViewState.Data? = null
-        val testData = CurrentNoteViewState.Data(false, testNote)
+        var result: NoteData.Data? = null
+        val testData = NoteData.Data(false, testNote)
         viewModel.getViewState().observeForever {
             result = it.data
         }
@@ -68,8 +65,8 @@ class CurrentNoteViewModelTest {
 
     @Test
     fun `deleteNote should return NoteViewState Data wish isDeleted`() {
-        var result: CurrentNoteViewState.Data? = null
-        val testData = CurrentNoteViewState.Data(true, null)
+        var result: NoteData.Data? = null
+        val testData = NoteData.Data(true, null)
         viewModel.getViewState().observeForever {
             result = it.data
         }

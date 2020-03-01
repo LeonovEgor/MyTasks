@@ -1,12 +1,7 @@
 package ru.leonov.mytasks.ui.note
 
-import android.R
-import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.MutableLiveData
-import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.rule.ActivityTestRule
 import io.mockk.*
 import org.junit.After
@@ -25,7 +20,7 @@ class CurrentNoteFragmentTest {
     val activityTestRule = ActivityTestRule(MainActivity::class.java, true, false)
 
     private val model: CurrentNoteViewModel = spyk(CurrentNoteViewModel(mockk()))
-    private val viewStateLiveData = MutableLiveData<CurrentNoteViewState>()
+    private val viewStateLiveData = MutableLiveData<NoteData>()
     private val testNote = Note("1", "title1", "text1")
 
     @Before

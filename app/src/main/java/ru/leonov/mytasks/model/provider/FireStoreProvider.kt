@@ -4,6 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import ru.leonov.mytasks.model.data.NoAuthException
@@ -34,6 +35,7 @@ class FireStoreProvider(private val firebaseAuth: FirebaseAuth, private val stor
         continuation.resume(user)
     }
 
+    @ExperimentalCoroutinesApi
     override fun subscribeToAllNotes(): ReceiveChannel<NoteResult> =
             Channel<NoteResult>(Channel.CONFLATED).apply {
 

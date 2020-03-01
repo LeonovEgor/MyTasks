@@ -3,36 +3,37 @@ package ru.leonov.mytasks.ui.note
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
 import ru.leonov.mytasks.model.data.NoteResult
 import ru.leonov.mytasks.model.data.NotesRepository
 import ru.leonov.mytasks.model.entities.Note
 import ru.leonov.mytasks.model.utils.Event
 import ru.leonov.mytasks.ui.base.BaseViewModel
 
+@ExperimentalCoroutinesApi
 class CurrentNoteViewModel(private val notesRepository: NotesRepository)
-    : BaseViewModel<CurrentNoteViewState.Data, CurrentNoteViewState>() {
+    : BaseViewModel<NoteData>() {
 
 
     private val pendingNote: Note?
-        get() = viewStateLiveData.value?.data?.note
+        get() = getViewChannel().poll()?.note
 
     private val _gotoNotesListEvent = MutableLiveData<Event<Unit>>()
     val gotoNotesListEvent: LiveData<Event<Unit>>
         get() = _gotoNotesListEvent
 
-
-
     fun save(note: Note){
-        viewStateLiveData.value = CurrentNoteViewState(CurrentNoteViewState.Data(note = note))
+        setData(NoteData(note = note))
     }
 
     fun loadNote(noteId: String) {
-        notesRepository.getNoteById(noteId).observeForever { result ->
-            result?.let {
-                viewStateLiveData.value = when (result) {
-                    is NoteResult.Success<*> -> CurrentNoteViewState(CurrentNoteViewState.Data(note = result.data as Note))
-                    is NoteResult.Error -> CurrentNoteViewState(error = result.error)
-                }
+        launch {
+            try {
+                val note = notesRepository.getNoteById(noteId)
+                setData(NoteData(note = note))
+            } catch (e: Throwable) {
+                setError(e)
             }
         }
     }
@@ -46,17 +47,17 @@ class CurrentNoteViewModel(private val notesRepository: NotesRepository)
     }
 
     private fun save() {
-        pendingNote?.let {
-            notesRepository.saveNote(it)
-        }
+        pendingNote?.let {save(it) }
     }
 
     fun delete() {
         pendingNote?.let {
-            notesRepository.deleteNote(it.id).observeForever { result ->
-                viewStateLiveData.value = when (result) {
-                    is NoteResult.Success<*> -> CurrentNoteViewState(CurrentNoteViewState.Data(isDeleted = true))
-                    is NoteResult.Error -> CurrentNoteViewState(error = result.error)
+            launch {
+                try {
+                    notesRepository.deleteNote(it.id)
+                    setData(NoteData(isDeleted = true))
+                } catch (e: Throwable) {
+                    setError(e)
                 }
             }
         }

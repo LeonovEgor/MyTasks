@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.ext.android.startKoin
 import ru.leonov.mytasks.model.data.NotesRepository
 import ru.leonov.mytasks.model.di.appModule
@@ -17,6 +18,7 @@ import ru.leonov.mytasks.ui.splash.SplashViewModel
 import java.io.Console
 
 class App: Application() {
+    @ExperimentalCoroutinesApi
     override fun onCreate() {
 //        val noteRep = NotesRepository(
 //                FireStoreProvider(

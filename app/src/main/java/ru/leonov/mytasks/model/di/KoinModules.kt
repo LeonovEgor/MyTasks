@@ -2,6 +2,7 @@ package ru.leonov.mytasks.model.di
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.koin.android.viewmodel.ext.koin.viewModel
 
 import org.koin.dsl.module.module
@@ -19,14 +20,17 @@ val appModule = module {
     single { NotesRepository(get()) }
 }
 
+@ExperimentalCoroutinesApi
 val splashModule = module {
     viewModel { SplashViewModel(get()) }
 }
 
+@ExperimentalCoroutinesApi
 val notesModule = module {
     viewModel { NotesViewModel(get()) }
 }
 
+@ExperimentalCoroutinesApi
 val currentNoteModule = module {
     viewModel { CurrentNoteViewModel(get()) }
 }

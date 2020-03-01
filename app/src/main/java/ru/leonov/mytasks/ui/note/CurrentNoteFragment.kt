@@ -1,6 +1,5 @@
 package ru.leonov.mytasks.ui.note
 
-import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,8 +8,8 @@ import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.Observer
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.fragment_current_note.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.jetbrains.anko.alert
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import ru.leonov.mytasks.R
@@ -20,7 +19,8 @@ import ru.leonov.mytasks.model.utils.getDateString
 import ru.leonov.mytasks.ui.base.BaseFragment
 import java.util.*
 
-class CurrentNoteFragment : BaseFragment<CurrentNoteViewState.Data, CurrentNoteViewState>() {
+@ExperimentalCoroutinesApi
+class CurrentNoteFragment : BaseFragment<NoteData>() {
 
     private val NOTE_ID = "NOTE"
 
@@ -104,15 +104,7 @@ class CurrentNoteFragment : BaseFragment<CurrentNoteViewState.Data, CurrentNoteV
             note?.let { viewModel.save(it) }
     }
 
-    private fun deleteNote() {
-        activity?.alert {
-            messageResource = R.string.note_delete_message
-            negativeButton(R.string.note_delete_cancel) { dialog -> dialog.dismiss() }
-            positiveButton(R.string.note_delete_ok) { viewModel.delete() }
-        }?.show()
-    }
-
-    override fun renderData(data: CurrentNoteViewState.Data) {
+    override fun renderData(data: NoteData) {
         if (data.isDeleted) {
             viewModel.gotoNotesList()
             return
@@ -122,6 +114,15 @@ class CurrentNoteFragment : BaseFragment<CurrentNoteViewState.Data, CurrentNoteV
 
         initView()
     }
+
+    private fun deleteNote() {
+        activity?.alert {
+            messageResource = R.string.note_delete_message
+            negativeButton(R.string.note_delete_cancel) { dialog -> dialog.dismiss() }
+            positiveButton(R.string.note_delete_ok) { viewModel.delete() }
+        }?.show()
+    }
+
 
     fun initView() {
         note?.let { note ->
@@ -146,7 +147,6 @@ class CurrentNoteFragment : BaseFragment<CurrentNoteViewState.Data, CurrentNoteV
             }
         }
     }
-
 
     override fun showError(error: String) {
         tv_status.text = error
