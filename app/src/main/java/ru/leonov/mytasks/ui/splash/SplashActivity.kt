@@ -38,6 +38,8 @@ class SplashActivity : AppCompatActivity(), CoroutineScope {
         initData();
     }
 
+
+
     @ExperimentalCoroutinesApi
     private fun initData() {
         dataJob = launch {

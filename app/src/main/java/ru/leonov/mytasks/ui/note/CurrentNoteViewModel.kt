@@ -39,7 +39,10 @@ class CurrentNoteViewModel(private val notesRepository: NotesRepository)
     }
 
     @VisibleForTesting
-    override public fun onCleared() = save()
+    override public fun onCleared() {
+        save()
+        super.onCleared()
+    }
 
     fun gotoNotesList() {
         save()
@@ -47,7 +50,15 @@ class CurrentNoteViewModel(private val notesRepository: NotesRepository)
     }
 
     private fun save() {
-        pendingNote?.let {save(it) }
+        launch {
+            pendingNote?.let {
+                try {
+                    notesRepository.saveNote(it)
+                } catch (e: Throwable) {
+                    setError(e)
+                }
+            }
+        }
     }
 
     fun delete() {

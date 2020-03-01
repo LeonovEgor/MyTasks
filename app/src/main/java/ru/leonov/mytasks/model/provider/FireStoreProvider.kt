@@ -43,19 +43,20 @@ class FireStoreProvider(private val firebaseAuth: FirebaseAuth, private val stor
 
                 try {
                     registration = userNotesCollection.addSnapshotListener { snapshot, e ->
-                        e?.let {
+                        val value = e?.let {
                             NoteResult.Error(it)
                         } ?: snapshot?.let {
-                                val notes = it.documents.map { it.toObject(Note::class.java) }
-                                NoteResult.Success(notes)
-                            }
+                            val notes = it.documents.map { it.toObject(Note::class.java) }
+                            NoteResult.Success(notes)
                         }
-                    } catch (e: Throwable) { offer(NoteResult.Error(e)) }
+                        value?.let {offer(it)}
+                    }
+                } catch (e: Throwable) { offer(NoteResult.Error(e)) }
 
                 invokeOnClose {
                     registration?.remove()
                 }
-    }
+            }
 
     override suspend fun getNoteById(id: String): Note = suspendCoroutine {continuation ->
         try {
