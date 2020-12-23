@@ -9,9 +9,8 @@
 
 ## Стек технологий:  
 - Coroutines
-- Sqlite;
+- Firebase
 - Matherial Design;
-
 
 ## Скриншоты приложения
 ![screenshots](./MyTasks1.png?raw=true)  
