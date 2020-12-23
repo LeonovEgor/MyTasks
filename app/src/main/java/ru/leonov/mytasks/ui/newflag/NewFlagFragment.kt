@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import ru.leonov.mytasks.R
 
@@ -19,7 +18,7 @@ class NewFlagFragment : Fragment() {
         newFlagViewModel = ViewModelProvider(this).get(NewFlagViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_new_flag, container, false)
         val textView = root.findViewById<TextView>(R.id.text_send)
-        newFlagViewModel!!.text.observe(viewLifecycleOwner, Observer { s -> textView.text = s })
+        newFlagViewModel!!.text.observe(viewLifecycleOwner, { s -> textView.text = s })
         return root
     }
 }

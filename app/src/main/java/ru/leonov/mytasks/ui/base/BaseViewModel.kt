@@ -40,4 +40,5 @@ open class BaseViewModel<S>:  ViewModel(), CoroutineScope {
 
         super.onCleared()
     }
+
 }

@@ -46,12 +46,11 @@ class MainActivity : AppCompatActivity() {
         }
         val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
         mAppBarConfiguration = AppBarConfiguration.Builder(
                 R.id.nav_notes, R.id.nav_reminding, R.id.nav_archive,
                 R.id.nav_trash, R.id.nav_important, R.id.nav_new_flag)
-                .setDrawerLayout(drawer)
+                .setOpenableLayout(drawer)
                 .build()
         val navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration!!)
@@ -59,7 +58,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
@@ -84,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration!!) || super.onSupportNavigateUp()
     }
 
-    fun onLogout() {
+    private fun onLogout() {
         AuthUI.getInstance()
                 .signOut(this)
                 .addOnCompleteListener {
@@ -92,4 +90,5 @@ class MainActivity : AppCompatActivity() {
                     finish()
                 }
     }
+
 }

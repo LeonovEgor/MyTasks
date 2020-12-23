@@ -30,7 +30,7 @@ class NotesViewModel(notesRepository: NotesRepository) : BaseViewModel<List<Note
     }
 
     @VisibleForTesting
-    override public fun onCleared() {
+    public override fun onCleared() {
         notesReceiveChannel.cancel()
         super.onCleared()
     }
@@ -50,4 +50,5 @@ class NotesViewModel(notesRepository: NotesRepository) : BaseViewModel<List<Note
     fun onNewNoteClick() {
         _openNewNoteEvent.value = Event(Unit)
     }
+
 }

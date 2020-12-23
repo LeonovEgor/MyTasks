@@ -1,7 +1,7 @@
 package ru.leonov.mytasks.model.entities
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import java.util.*
 
 @Parcelize
@@ -11,15 +11,6 @@ data class Note (
          val text: String = "",
          val date: Date = Date(),
          val color: Color = Color.WHITE) : Parcelable {
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as Note
-
-        return id == other.id
-    }
 
     enum class Color{
         WHITE,
@@ -31,12 +22,22 @@ data class Note (
         PINK
     }
 
-//    override fun hashCode(): Int {
-//        var result = id.hashCode()
-//        result = 31 * result + title.hashCode()
-//        result = 31 * result + text.hashCode()
-//        result = 31 * result + date.hashCode()
-//        result = 31 * result + color.hashCode()
-//        return result
-//    }
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Note
+
+        return id == other.id
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + title.hashCode()
+        result = 31 * result + text.hashCode()
+        result = 31 * result + date.hashCode()
+        result = 31 * result + color.hashCode()
+        return result
+    }
+
 }

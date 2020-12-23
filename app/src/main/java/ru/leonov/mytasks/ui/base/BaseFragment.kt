@@ -5,30 +5,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.viewbinding.ViewBinding
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.consumeEach
+import ru.leonov.mytasks.databinding.FragmentCurrentNoteBinding
 import kotlin.coroutines.CoroutineContext
 
 @ExperimentalCoroutinesApi
 abstract class BaseFragment<T> : Fragment(), CoroutineScope {
 
     abstract val viewModel: BaseViewModel<T>
-    abstract val layoutRes: Int
+    //abstract val layoutRes: Int
 
     private val job = Job()
     private lateinit var dataJob: Job
     private lateinit var errorJob: Job
 
-
     override val coroutineContext: CoroutineContext by lazy {
         Dispatchers.Main + job
     }
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(layoutRes, container, false)
-    }
+//    override fun onCreateView(inflater: LayoutInflater,
+//                              container: ViewGroup?, savedInstanceState: Bundle?): View? {
+//        return inflater.inflate(layoutRes, container, false)
+//    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

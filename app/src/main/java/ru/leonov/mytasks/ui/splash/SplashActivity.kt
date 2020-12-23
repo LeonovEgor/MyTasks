@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.firebase.ui.auth.AuthUI
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.consumeEach
@@ -35,10 +34,8 @@ class SplashActivity : AppCompatActivity(), CoroutineScope {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        initData();
+        initData()
     }
-
-
 
     @ExperimentalCoroutinesApi
     private fun initData() {
@@ -101,4 +98,5 @@ class SplashActivity : AppCompatActivity(), CoroutineScope {
         super.onDestroy()
         coroutineContext.cancel()
     }
+
 }

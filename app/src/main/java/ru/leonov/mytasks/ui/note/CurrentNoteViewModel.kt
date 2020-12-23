@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
-import ru.leonov.mytasks.model.data.NoteResult
 import ru.leonov.mytasks.model.data.NotesRepository
 import ru.leonov.mytasks.model.entities.Note
 import ru.leonov.mytasks.model.utils.Event
@@ -39,7 +38,7 @@ class CurrentNoteViewModel(private val notesRepository: NotesRepository)
     }
 
     @VisibleForTesting
-    override public fun onCleared() {
+    public override fun onCleared() {
         save()
         super.onCleared()
     }
@@ -73,4 +72,5 @@ class CurrentNoteViewModel(private val notesRepository: NotesRepository)
             }
         }
     }
+
 }

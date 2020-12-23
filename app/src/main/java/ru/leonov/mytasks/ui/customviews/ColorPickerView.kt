@@ -103,5 +103,4 @@ class ColorPickerView : LinearLayout {
         animator.start()
     }
 
-
 }

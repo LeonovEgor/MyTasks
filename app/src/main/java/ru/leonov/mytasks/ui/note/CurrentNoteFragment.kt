@@ -3,16 +3,13 @@ package ru.leonov.mytasks.ui.note
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import androidx.lifecycle.Observer
+import android.view.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.fragment_current_note.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.jetbrains.anko.alert
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import ru.leonov.mytasks.R
+import ru.leonov.mytasks.databinding.FragmentCurrentNoteBinding
 import ru.leonov.mytasks.model.entities.Note
 import ru.leonov.mytasks.model.utils.getColorInt
 import ru.leonov.mytasks.model.utils.getDateString
@@ -22,7 +19,10 @@ import java.util.*
 @ExperimentalCoroutinesApi
 class CurrentNoteFragment : BaseFragment<NoteData>() {
 
-    private val NOTE_ID = "NOTE"
+    private val noteId = "NOTE"
+
+    private var _binding: FragmentCurrentNoteBinding? = null
+    private val binding get() = _binding!!
 
     private var note: Note? = null
     var color = Note.Color.WHITE
@@ -30,12 +30,22 @@ class CurrentNoteFragment : BaseFragment<NoteData>() {
     private lateinit var mnuDelete: MenuItem
     private lateinit var mnuColor: MenuItem
 
-    override val layoutRes = R.layout.fragment_current_note
+    //override val layoutRes = R.layout.fragment_current_note
     override val viewModel: CurrentNoteViewModel by sharedViewModel()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentCurrentNoteBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(true)
 
         loadNote()
         initNavigation()
@@ -43,7 +53,7 @@ class CurrentNoteFragment : BaseFragment<NoteData>() {
     }
 
     private fun loadNote() {
-        val noteId = arguments?.getString(NOTE_ID)
+        val noteId = arguments?.getString(noteId)
 
         noteId?.let {
             viewModel.loadNote(it)
@@ -64,7 +74,7 @@ class CurrentNoteFragment : BaseFragment<NoteData>() {
     }
 
     private fun initNavigation() {
-        viewModel.gotoNotesListEvent.observe(viewLifecycleOwner, Observer { event ->
+        viewModel.gotoNotesListEvent.observe(viewLifecycleOwner, { event ->
             event.getContentIfNotHandled()?.let {
                 activity?.onBackPressed()
             }
@@ -78,30 +88,38 @@ class CurrentNoteFragment : BaseFragment<NoteData>() {
     }
 
     private fun setEditListener() {
-        et_title.addTextChangedListener(textChangeListener)
-        et_body.addTextChangedListener(textChangeListener)
+        binding.etTitle.addTextChangedListener(textChangeListener)
+        binding.etBody.addTextChangedListener(textChangeListener)
     }
 
     private fun removeEditListener() {
-        et_title.removeTextChangedListener(textChangeListener)
-        et_body.removeTextChangedListener(textChangeListener)
+        binding.etTitle.removeTextChangedListener(textChangeListener)
+        binding.etBody.removeTextChangedListener(textChangeListener)
     }
 
     fun saveNote() {
-        if (et_title.text == null || et_title.text!!.length < 3) return
+        if (binding.etTitle.text == null || binding.etTitle.text!!.length < 3) return
 
             note = note?.copy(
-                    title = et_title.text.toString(),
-                    text = et_body.text.toString(),
+                    title = binding.etTitle.text.toString(),
+                    text = binding.etBody.text.toString(),
                     date = Date(),
                     color = color
             ) ?: Note(UUID.randomUUID().toString(),
-                    et_title.text.toString(),
-                    et_body.text.toString(),
+                    binding.etTitle.text.toString(),
+                    binding.etBody.text.toString(),
                     date = Date(),
                     color = color)
 
             note?.let { viewModel.save(it) }
+    }
+
+    private fun deleteNote() {
+        activity?.alert {
+            messageResource = R.string.note_delete_message
+            negativeButton(R.string.note_delete_cancel) { dialog -> dialog.dismiss() }
+            positiveButton(R.string.note_delete_ok) { viewModel.delete() }
+        }?.show()
     }
 
     override fun renderData(data: NoteData) {
@@ -115,48 +133,39 @@ class CurrentNoteFragment : BaseFragment<NoteData>() {
         initView()
     }
 
-    private fun deleteNote() {
-        activity?.alert {
-            messageResource = R.string.note_delete_message
-            negativeButton(R.string.note_delete_cancel) { dialog -> dialog.dismiss() }
-            positiveButton(R.string.note_delete_ok) { viewModel.delete() }
-        }?.show()
-    }
-
-
-    fun initView() {
+    private fun initView() {
         note?.let { note ->
             removeEditListener()
-            if(et_title.text.toString() != note.title) et_title.setText(note.title)
-            if(et_body.text.toString() != note.text) et_body.setText(note.text)
-            color = note.color;
-            tv_status.text = note.date.getDateString()
+            if(binding.etTitle.text.toString() != note.title) binding.etTitle.setText(note.title)
+            if(binding.etBody.text.toString() != note.text) binding.etBody.setText(note.text)
+            color = note.color
+            binding.tvStatus.text = note.date.getDateString()
         }?: let {
-            tv_status.text = getString(R.string.new_note)
+            binding.tvStatus.text = getString(R.string.new_note)
         }
 
         setEditListener()
 
-        colorPicker.onColorClickListener = { selectedColor ->
+        binding.colorPicker.onColorClickListener = { selectedColor ->
             context?.let { checkedContext ->
-                et_title.setBackgroundColor(selectedColor.getColorInt(checkedContext))
-                et_body.setBackgroundColor(selectedColor.getColorInt(checkedContext))
+                binding.etTitle.setBackgroundColor(selectedColor.getColorInt(checkedContext))
+                binding.etBody.setBackgroundColor(selectedColor.getColorInt(checkedContext))
                 color = selectedColor
                 saveNote()
-                colorPicker.close()
+                binding.colorPicker.close()
             }
         }
     }
 
     override fun showError(error: String) {
-        tv_status.text = error
+        binding.tvStatus.text = error
     }
 
     private fun togglePalette() {
-        if (colorPicker.isOpen) {
-            colorPicker.close()
+        if (binding.colorPicker.isOpen) {
+            binding.colorPicker.close()
         } else {
-            colorPicker.open()
+            binding.colorPicker.open()
         }
     }
 
@@ -164,16 +173,16 @@ class CurrentNoteFragment : BaseFragment<NoteData>() {
 
     override fun onPause() {
         super.onPause()
-        mnuDelete.isVisible = false;
-        mnuColor.isVisible = false;
+        mnuDelete.isVisible = false
+        mnuColor.isVisible = false
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
         mnuDelete = menu.findItem(R.id.delete)
         mnuColor = menu.findItem(R.id.palette)
-        mnuDelete.isVisible = true;
-        mnuColor.isVisible = true;
+        mnuDelete.isVisible = true
+        mnuColor.isVisible = true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
