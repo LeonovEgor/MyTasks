@@ -25,8 +25,6 @@ class NotesFragment : BaseFragment<List<Note>?>() {
 
     private var navController: NavController? = null
 
-    //override val layoutRes = R.layout.fragment_notes_list
-
     override val viewModel: NotesViewModel by sharedViewModel()
 
     private lateinit var adapter: NotesRVAdapter

@@ -30,7 +30,6 @@ class CurrentNoteFragment : BaseFragment<NoteData>() {
     private lateinit var mnuDelete: MenuItem
     private lateinit var mnuColor: MenuItem
 
-    //override val layoutRes = R.layout.fragment_current_note
     override val viewModel: CurrentNoteViewModel by sharedViewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
